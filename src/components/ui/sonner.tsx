@@ -1,10 +1,12 @@
-import { useTheme } from "next-themes"
-import { Toaster as Sonner, toast } from "sonner"
+
+import { toast, Toaster as Sonner } from "sonner"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
+  // Using a simple check for dark mode instead of next-themes
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const theme = prefersDark ? 'dark' : 'light'
 
   return (
     <Sonner

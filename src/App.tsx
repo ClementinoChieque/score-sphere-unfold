@@ -12,6 +12,7 @@ import Schedule from "./pages/Schedule";
 
 const queryClient = new QueryClient();
 
+// Wrap the app with the necessary providers
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
