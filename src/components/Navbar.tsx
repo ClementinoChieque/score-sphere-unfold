@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SearchBar from './SearchBar';
+import { useAuth } from '@/hooks/useAuth';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   return (
     <nav className="py-4 border-b border-gray-800 bg-gray-900/90 backdrop-blur-md sticky top-0 z-50">
@@ -43,9 +44,23 @@ const Navbar = () => {
           >
             <Search className="h-5 w-5 text-gray-400" />
           </button>
-          <Button className="bg-sport-highlight hover:bg-sport-highlight/90 text-gray-900">
-            Entrar
-          </Button>
+          {user ? (
+            <Button 
+              onClick={signOut}
+              variant="ghost" 
+              className="text-gray-300 hover:text-white"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sair
+            </Button>
+          ) : (
+            <Button 
+              onClick={() => window.location.href = '/auth'} 
+              className="bg-sport-highlight hover:bg-sport-highlight/90 text-gray-900"
+            >
+              Entrar
+            </Button>
+          )}
         </div>
 
         <div className="flex md:hidden items-center gap-4">
@@ -68,7 +83,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 border-b border-gray-800 py-4 px-6 flex flex-col gap-4">
           <Link to="/live" className="text-gray-300 py-2 border-b border-gray-800">
@@ -89,7 +103,6 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Search overlay */}
       {searchOpen && (
         <div className="absolute top-full left-0 right-0 p-4 bg-gray-900 border-b border-gray-800">
           <SearchBar onClose={() => setSearchOpen(false)} />
