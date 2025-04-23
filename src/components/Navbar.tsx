@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SearchBar from './SearchBar';
@@ -9,6 +10,15 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleAuthClick = () => {
+    if (user) {
+      signOut();
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <nav className="py-4 border-b border-gray-800 bg-gray-900/90 backdrop-blur-md sticky top-0 z-50">
@@ -55,7 +65,7 @@ const Navbar = () => {
             </Button>
           ) : (
             <Button 
-              onClick={() => window.location.href = '/auth'} 
+              onClick={() => navigate('/auth')} 
               className="bg-sport-highlight hover:bg-sport-highlight/90 text-gray-900"
             >
               Entrar
@@ -85,20 +95,26 @@ const Navbar = () => {
 
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 border-b border-gray-800 py-4 px-6 flex flex-col gap-4">
-          <Link to="/live" className="text-gray-300 py-2 border-b border-gray-800">
+          <Link to="/live" className="text-gray-300 py-2 border-b border-gray-800" onClick={() => setMobileMenuOpen(false)}>
             Ao Vivo
           </Link>
-          <Link to="/schedule" className="text-gray-300 py-2 border-b border-gray-800">
+          <Link to="/schedule" className="text-gray-300 py-2 border-b border-gray-800" onClick={() => setMobileMenuOpen(false)}>
             Calendário
           </Link>
-          <Link to="/leagues" className="text-gray-300 py-2 border-b border-gray-800">
+          <Link to="/leagues" className="text-gray-300 py-2 border-b border-gray-800" onClick={() => setMobileMenuOpen(false)}>
             Competições
           </Link>
-          <Link to="/teams" className="text-gray-300 py-2 border-b border-gray-800">
+          <Link to="/teams" className="text-gray-300 py-2 border-b border-gray-800" onClick={() => setMobileMenuOpen(false)}>
             Times
           </Link>
-          <Button className="bg-sport-highlight hover:bg-sport-highlight/90 text-gray-900 mt-2">
-            Entrar
+          <Button 
+            onClick={() => {
+              handleAuthClick();
+              setMobileMenuOpen(false);
+            }} 
+            className="bg-sport-highlight hover:bg-sport-highlight/90 text-gray-900 mt-2"
+          >
+            {user ? 'Sair' : 'Entrar'}
           </Button>
         </div>
       )}
